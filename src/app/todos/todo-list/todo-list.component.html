@@ -1,0 +1,12 @@
+<div>
+    <h1 style="text-align: center">My Todo list</h1>
+    <mat-card>
+        <mat-list *ngFor="let todo of todos">
+            <mat-list-item>
+                {{ todo.title }}
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+    </mat-card>
+</div>
+
