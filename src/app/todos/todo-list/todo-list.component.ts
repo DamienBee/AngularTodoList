@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../todo';
+import { Observable } from 'rxjs';
+
+
+import { Store, select } from '@ngrx/store';
+import * as fromRoot from '../../state/app.state';
+import * as fromTodo from '../state/todo.reducer';
+import * as todoActions from '../state/todo.actions';
 
 @Component({
   selector: 'todo-list',
@@ -8,21 +15,14 @@ import { Todo } from '../todo';
 })
 export class TodoListComponent implements OnInit {
 
-  todos: Array<Todo> = [];
+  todos$: Observable<Todo[]>; 
+  componentActive = true;
 
-  constructor() { }
+  constructor(private store: Store<fromTodo.State>) { }
 
-  ngOnInit() {
-    let todo1 = new Todo();
-    todo1.title = "Make a great Appli";
-    let todo2 = new Todo();
-    todo2.title = "Install visual studio";
-    todo2.finished = true;
-    let todo3 = new Todo();
-    todo3.title = "Send the result";
-    this.todos.push(todo1);
-    this.todos.push(todo2);
-    this.todos.push(todo3);
+  ngOnInit() {    
+    this.todos$ = this.store.pipe(select(fromTodo.getTodos));
+    
+    this.store.dispatch(new todoActions.GetTodos);
   }
-
 }
