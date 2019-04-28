@@ -1,11 +1,22 @@
 <div>
-    <h1 style="text-align: center">My Todo list</h1>
-    <mat-card *ngIf="todos$ | async as todos">
-        <mat-list *ngFor="let todo of todos">
+    <h1 class="todo-title">My Todo list</h1>
+    <mat-card>
+        <mat-list *ngFor="let todo of todosStore.todosNotFinished$ | async">
             <mat-list-item>
-                <div style="padding-right: 5.;padding-right: 15px;">
-                    <mat-checkbox [(ngModel)]="todo.finished"></mat-checkbox>
-                </div> 
+                <div class="check-box-layout">
+                    <mat-checkbox [checked]="todo.isFinished"
+                                  (change)="todosStore.setFinished($event, todo)"></mat-checkbox>
+                </div>
+                {{ todo.title }}
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+        <mat-list *ngFor="let todo of todosStore.todosFinished$ | async">
+            <mat-list-item class="completed-list">
+                <div class="check-box-layout">
+                    <mat-checkbox [checked]="todo.isFinished"
+                                  (change)="todosStore.setFinished($event, todo)"></mat-checkbox>
+                </div>
                 {{ todo.title }}
             </mat-list-item>
             <mat-divider></mat-divider>

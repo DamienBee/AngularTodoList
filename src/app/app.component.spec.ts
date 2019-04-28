@@ -1,12 +1,10 @@
 import { async, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { TodoModule } from './todos/todo.module';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { TodoEffects } from './todos/state/todo.effects';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemTodoService } from './todos/todo-in-mem-data.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -16,8 +14,8 @@ describe('AppComponent', () => {
       ],
       imports: [
         TodoModule,
-        StoreModule.forRoot({}),
-        EffectsModule.forRoot([TodoEffects])
+        HttpClientModule,
+        InMemoryWebApiModule.forRoot(InMemTodoService)
       ]
     }).compileComponents();
   }));

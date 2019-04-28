@@ -1,12 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { StoreModule } from '@ngrx/store';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { AppComponent } from './app.component';
+import { InMemTodoService } from './todos/todo-in-mem-data.service';
 import { TodoModule } from './todos/todo.module';
-import { EffectsModule } from '@ngrx/effects';
-import { TodoEffects } from './todos/state/todo.effects';
-
 
 @NgModule({
   declarations: [
@@ -16,8 +14,7 @@ import { TodoEffects } from './todos/state/todo.effects';
     BrowserModule,
     HttpClientModule,
     TodoModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([TodoEffects])
+    InMemoryWebApiModule.forRoot(InMemTodoService)
   ],
   bootstrap: [AppComponent]
 })

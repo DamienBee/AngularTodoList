@@ -1,0 +1,12 @@
+.completed-list {
+    text-decoration: line-through;
+}
+
+.check-box-layout {
+    padding-right: 5px;
+    padding-right: 15px;
+}
+
+.todo-title {
+    text-align: center
+}
