@@ -1,3 +1,13 @@
-<p>
-  todo-detail works!
-</p>
+<div>
+  <mat-card>
+    <div *ngFor="let todo of todosStore.todos$ | async">
+      <div *ngIf="todo.id === todoDetailsId">
+        <h1 class="todo-title">{{todo.title}}</h1>
+        <div>{{todo.description}}</div>
+        <br>
+        <a class="back-link"
+           routerLink="/todos">Back</a>
+      </div>
+    </div>
+  </mat-card>
+</div>

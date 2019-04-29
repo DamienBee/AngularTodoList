@@ -10,3 +10,9 @@
 .todo-title {
     text-align: center
 }
+
+.detail-link-container {
+    position: absolute;
+    float: left;
+    left: 90%;
+}

@@ -5,6 +5,7 @@ import { MatCardModule, MatCheckboxModule, MatDividerModule, MatListModule } fro
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TodoDetailComponent } from './todo-detail/todo-detail.component';
 import { TodoListComponent } from './todo-list/todo-list.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [TodoListComponent, TodoDetailComponent],
@@ -15,9 +16,10 @@ import { TodoListComponent } from './todo-list/todo-list.component';
     MatCardModule,
     MatListModule,
     MatCheckboxModule,
-    MatDividerModule
+    MatDividerModule,
+    RouterModule
   ],
-  exports: [TodoListComponent]
+  exports: [TodoListComponent, TodoDetailComponent]
   
 })
 export class TodoModule { }

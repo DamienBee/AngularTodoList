@@ -37,16 +37,21 @@ export class TodosStoreService {
         map(todos => this.todos.filter(todo => !todo.isFinished))
     )
 
-    // the getter will return the last value emitted in _todos subject
+    // The getter will return the last value emitted in _todos subject
     get todos(): Todo[] {
         return this._todos.getValue();
     }
 
 
-    //   assigning a value to this.todos will push it onto the observable 
-    //   and down to all of its subsribers (ex: this.todos = [])
+    // Assigning a value to this.todos will push it onto the observable 
+    // and down to all of its subsribers (ex: this.todos = [])
     set todos(val: Todo[]) {
         this._todos.next(val);
+    }
+
+    // Get a Todo from its ID
+    findTodo(id: string) {
+        return this.todos.find(t => t.id === id);
     }
 
     //   async addTodo(title: string) {
