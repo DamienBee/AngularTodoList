@@ -16,19 +16,24 @@ export class TodoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getTodos(): Observable<Todo[]> {
+  public getTodos(): Observable<Todo[]> {
     return this.httpClient.get<Todo[]>(this.TODO_API_URL).pipe(
       tap(data => console.log('All: ' + JSON.stringify(data))),
-       catchError(this.handleError)
+      catchError(this.handleError)
     );
   }
 
   public updateTodo(todo: Todo) {
-    const isFinished = todo.isFinished;
     return this.httpClient.put<Todo>(this.TODO_API_URL, todo, httpOptions).pipe(
+      shareReplay(),
       catchError(this.handleError)
     );
-    shareReplay();
+  }
+
+  public create(todo: Todo) {
+    return this.httpClient.post<Todo>(this.TODO_API_URL, todo, httpOptions).pipe(
+      shareReplay()
+    );
   }
 
   /**

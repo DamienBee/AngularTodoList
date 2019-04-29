@@ -1,10 +1,12 @@
-import { async, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { TodoModule } from './todos/todo.module';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import { async, TestBed } from '@angular/core/testing';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { InMemTodoService } from './todos/todo-in-mem-data.service';
+import { TodoModule } from './todos/todo.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -13,10 +15,13 @@ describe('AppComponent', () => {
         AppComponent
       ],
       imports: [
+        BrowserModule,
         TodoModule,
         HttpClientModule,
-        InMemoryWebApiModule.forRoot(InMemTodoService)
-      ]
+        InMemoryWebApiModule.forRoot(InMemTodoService),
+        AppRoutingModule
+      ],
+      providers: [ {provide: APP_BASE_HREF, useValue: '/'}]
     }).compileComponents();
   }));
 

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Todo } from '../todo';
-import { TodosStoreService } from '../todos-store.service';
 import { ActivatedRoute } from '@angular/router';
-import { stringify } from 'querystring';
+import { TodosStoreService } from '../todos-store.service';
 
 @Component({
-  selector: 'pm-todo-detail',
+  selector: 'todo-detail',
   templateUrl: './todo-detail.component.html',
   styleUrls: ['./todo-detail.component.css']
 })

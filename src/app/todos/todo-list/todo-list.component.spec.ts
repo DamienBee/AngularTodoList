@@ -1,10 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatCheckboxModule, MatDividerModule, MatListModule } from '@angular/material';
-import { TodoService } from '../todo.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatListModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TodosStoreService } from '../todos-store.service';
 import { TodoListComponent } from './todo-list.component';
 
+
 describe('TodoListComponent', () => {
+
   let component: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
 
@@ -12,28 +17,30 @@ describe('TodoListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [TodoListComponent],
       imports: [
-        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatFormFieldModule,
         MatCardModule,
+        MatInputModule,
+        MatListModule,
         MatCheckboxModule,
         MatDividerModule,
-        MatListModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ],
-      providers: [ {provide: TodoService}]
-    })
-      .compileComponents();
-  }));
+      providers: [{ provide: TodosStoreService, useClass: MockTodosStoreService }]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TodoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
-  // it('todo list should contains initial todos', () => {
-  //   expect(component.todoList.subscribe.length).toEqual(3);
-  // });
 });
+
+class MockTodosStoreService extends TodosStoreService {
+}

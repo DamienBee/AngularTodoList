@@ -1,17 +1,38 @@
 <div>
     <mat-card>
         <h1 class="todo-title">My Todo list</h1>
+        <form novalidate
+              (ngSubmit)="save()"
+              [formGroup]="addTodoForm">
+            <mat-form-field class="form-element">
+                <mat-label>Title</mat-label>
+                <input matInput
+                       placeholder="Title"
+                       formControlName="title">
+            </mat-form-field>
+            <mat-form-field class="form-element">
+                <mat-label>Description</mat-label>
+                <textarea matInput
+                          placeholder="Description"
+                          formControlName="description">
+                            </textarea>
+            </mat-form-field>
+            <button mat-raised-button
+                    class="form-element"
+                    type="submit"
+                    [disabled]="!addTodoForm.valid">
+                Save
+            </button>
+        </form>
         <mat-list *ngFor="let todo of todosStore.todosNotFinished$ | async">
-            <div>
-                <mat-list-item>
-                    <div class="check-box-layout">
-                        <mat-checkbox [checked]="todo.isFinished"
-                                    (change)="todosStore.setFinished($event, todo)"></mat-checkbox>
-                    </div>
-                    {{ todo.title }}
-                    <div class="detail-link-container"><a routerLink="/todos/{{todo.id}}">Details</a></div>
-                </mat-list-item>
-            </div>
+            <mat-list-item>
+                <div class="check-box-layout">
+                    <mat-checkbox [checked]="todo.isFinished"
+                                  (change)="todosStore.setFinished($event, todo)"></mat-checkbox>
+                </div>
+                {{ todo.title }}
+                <div class="detail-link-container"><a routerLink="/todos/{{todo.id}}">Details</a></div>
+            </mat-list-item>
             <mat-divider></mat-divider>
         </mat-list>
         <mat-list *ngFor="let todo of todosStore.todosFinished$ | async">

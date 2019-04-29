@@ -1,6 +1,10 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatCardModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TodosStoreService } from '../todos-store.service';
 import { TodoDetailComponent } from './todo-detail.component';
+
 
 describe('TodoDetailComponent', () => {
   let component: TodoDetailComponent;
@@ -8,9 +12,15 @@ describe('TodoDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TodoDetailComponent ]
+      declarations: [TodoDetailComponent],
+      imports: [
+        MatCardModule,
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
+      providers: [{ provide: TodosStoreService, useClass: MockTodosStoreService }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -23,3 +33,7 @@ describe('TodoDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+class MockTodosStoreService extends TodosStoreService {
+}

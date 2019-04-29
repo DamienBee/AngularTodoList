@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-//import { uuid } from './uuid';
 import { Todo } from './todo';
 import { TodoService } from './todo.service';
 
@@ -27,13 +26,12 @@ export class TodosStoreService {
     // Expose the observable$ part of the _todos subject (read only stream)
     readonly todos$: Observable<Todo[]> = this._todos.asObservable();
 
-
     // we'll compose the todos$ observable with map operator to create a stream of only completed todos
-    readonly todosFinished$ = this.todos$.pipe(
+    readonly todosFinished$: Observable<Todo[]> = this.todos$.pipe(
         map(todos => this.todos.filter(todo => todo.isFinished))
     )
 
-    readonly todosNotFinished$ = this.todos$.pipe(
+    readonly todosNotFinished$: Observable<Todo[]> = this.todos$.pipe(
         map(todos => this.todos.filter(todo => !todo.isFinished))
     )
 
@@ -41,7 +39,6 @@ export class TodosStoreService {
     get todos(): Todo[] {
         return this._todos.getValue();
     }
-
 
     // Assigning a value to this.todos will push it onto the observable 
     // and down to all of its subsribers (ex: this.todos = [])
@@ -54,61 +51,42 @@ export class TodosStoreService {
         return this.todos.find(t => t.id === id);
     }
 
-    //   async addTodo(title: string) {
+    /**
+     * Create an uncompleted Todo.
+     * Note: Id is always overidden even if set
+     * 
+     * @param todoToCreate 
+     * @returns Returns the id of the todo created
+     */
+    async addTodo(todoToCreate: Todo): Promise<string> {
+        if (todoToCreate.title && todoToCreate.title.length) {
 
-    //     if(title && title.length) {
+            // This is called an optimistic update
+            // updating the record locally before actually getting a response from the server
+            // this way, the interface seems blazing fast to the enduser
+            // and we just assume that the server will return success responses anyway most of the time.
+            // if server returns an error, we just revert back the changes in the catch statement 
 
-    //       // This is called an optimistic update
-    //       // updating the record locally before actually getting a response from the server
-    //       // this way, the interface seems blazing fast to the enduser
-    //       // and we just assume that the server will return success responses anyway most of the time.
-    //       // if server returns an error, we just revert back the changes in the catch statement 
+            todoToCreate.id = this.uuid();
+            todoToCreate.isFinished = false;
 
-    //       const tmpId = uuid();
-    //       const tmpTodo = {id: tmpId, title, isCompleted: false};
+            this.todos = [
+                todoToCreate,
+                ...this.todos
+            ];
 
-    //       this.todos = [
-    //         ...this.todos, 
-    //         tmpTodo
-    //       ];
-
-    //       try {
-    //         const todo = await this.todoService
-    //           .create({title, isCompleted: false})
-    //           .toPromise();
-
-    //         // we swap the local tmp record with the record from the server (id must be updated)
-    //         const index = this.todos.indexOf(this.todos.find(t => t.id === tmpId));
-    //         this.todos[index] = {
-    //           ...todo
-    //         }
-    //         this.todos = [...this.todos];
-    //       } catch (e) {
-    //         // is server sends back an error, we revert the changes
-    //         console.error(e);
-    //         this.removeTodo(tmpId, false);
-    //       }
-
-    //     }
-
-    //   }
-
-    //   async removeTodo(id: string, serverRemove = true) {
-    //     // optimistic update
-    //     const todo = this.todos.find(t => t.id === id);
-    //     this.todos = this.todos.filter(todo => todo.id !== id);
-
-    //     if(serverRemove) {
-    //       try {
-    //         await this.todoService.remove(id).toPromise();
-    //       } catch (e) {
-    //         console.error(e);
-    //         this.todos = [...this.todos, todo];
-    //       }
-
-    //     }
-
-    //   }
+            try {
+                const todo = await this.todoService
+                    .create(todoToCreate)
+                    .toPromise();
+            } catch (e) {
+                // If server sends back an error, revert the changes
+                console.error(e);
+                this.todos = this.todos.filter(todo => todo.id !== todoToCreate.id);
+            }
+        }
+        return todoToCreate.id;
+    }
 
     async setFinished(event: MatCheckboxChange, todo: Todo) {
         const isFinished = event.checked;
@@ -142,4 +120,10 @@ export class TodosStoreService {
         console.log(this.todos);
     }
 
+    uuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 }

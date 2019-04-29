@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InMemTodoService } from './todos/todo-in-mem-data.service';
 import { TodoModule } from './todos/todo.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
